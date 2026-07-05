@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-// Seamlessly fall back to port 5000 if Vite's client .env isn't loaded yet
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+// Seamlessly fall back to your live Render API if Vite's client .env isn't loaded yet
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://portfolio-backend-rjze.onrender.com/api'
 
 const api = axios.create({
   baseURL: BASE_URL,
