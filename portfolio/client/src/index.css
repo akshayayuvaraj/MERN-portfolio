@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans antialiased transition-colors duration-300;
+    @apply bg-white text-gray-900;
+  }
+
+  .dark body {
+    @apply bg-[#0a0e1a] text-[#f1f5f9];
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-[#161b2e];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-indigo-500 rounded-full;
+  }
+}
+@layer components {
+  .section-container {
+    /* Increased from 1100px to 1400px */
+    @apply w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-12 py-20;
+  }
+  .section-title {
+    @apply text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-gray-500 dark:text-gray-400 text-lg mb-12;
+  }
+
+  .card {
+    @apply bg-white dark:bg-[#161b2e] rounded-2xl border border-gray-100 dark:border-gray-700/40 shadow-sm;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:-translate-y-0.5;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-6 py-3 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl transition-all duration-200 hover:border-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400 hover:-translate-y-0.5;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-indigo-600 via-purple-600 to-sky-500 bg-clip-text text-transparent;
+  }
+
+  .dark .gradient-text {
+    @apply from-indigo-400 via-purple-400 to-sky-400;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
