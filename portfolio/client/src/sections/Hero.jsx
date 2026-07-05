@@ -56,8 +56,8 @@ function FloatingBadge({ top, bottom, left, right, icon, text, delay }) {
 
 export default function Hero() {
   const handleResumeDownload = async () => {
-    // Dynamically retrieve your backend base URL from Vite's env variables
-    const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    // Fixed: Updated the production fallback link away from localhost to your live Render backend path
+    const apiBaseUrl = import.meta.env.VITE_API_URL || 'https://portfolio-backend-rjze.onrender.com/api';
     
     try {
       const response = await downloadResume()
@@ -69,7 +69,8 @@ export default function Hero() {
       link.click()
       link.remove()
     } catch (error) {
-      // Corrected fallback to open directly from the backend server port instead of frontend port
+      console.error("Axios blob download failed, attempting window bypass:", error);
+      // Opens the download route cleanly from your live web service cloud platform container
       window.open(`${apiBaseUrl}/resume/download`, '_blank')
     }
   }
@@ -86,7 +87,7 @@ export default function Hero() {
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl" />
 
-      {/* Main Container - Matches the wider look */}
+      {/* Main Container */}
       <div className="w-full max-w-[1350px] mx-auto px-4 sm:px-8 lg:px-16 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
 

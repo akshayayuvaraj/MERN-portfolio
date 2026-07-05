@@ -27,11 +27,12 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }))
 
-// CORS
+// CORS - Updated to authorize your real live production domain
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || 'http://localhost:5173',
-    'https://akshaya-portfolio.vercel.app',
+    'https://mern-portfolio-nu-eight.vercel.app', // Your verified live production app
+    'https://akshaya-portfolio.vercel.app'
   ],
   credentials: true,
 }))
@@ -67,6 +68,11 @@ app.use('/api/admin', adminRoutes)
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() })
+})
+
+// Root welcome path (avoids confusing 404s when testing the baseline Render link)
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'Portfolio API Backend is operating normally.' })
 })
 
 // 404 handler
