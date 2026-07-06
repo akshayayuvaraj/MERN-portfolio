@@ -23,13 +23,12 @@ const submitContact = async (req, res, next) => {
         contactId = contact._id;
       } catch (dbError) {
         console.error('[Database Error]:', dbError.message)
-        // We continue anyway so the user's message isn't lost
       }
     }
 
-    // 2. Await the emails so we can catch errors correctly
-    // We use Promise.allSettled so one failing doesn't stop the other
-    await Promise.allSettled([
+    // 2. FIRE AND FORGET: Removed 'await' to prevent UI hanging
+    // The server will now return the success response immediately
+    Promise.allSettled([
       sendNotificationEmail({ name, email, subject, message }),
       sendThankYouEmail({ name, email })
     ]).then((results) => {
@@ -42,7 +41,7 @@ const submitContact = async (req, res, next) => {
       });
     });
 
-    // 3. Send success response
+    // 3. Send success response IMMEDIATELY
     return res.status(201).json({
       success: true,
       message: "Message received! I'll get back to you soon.",

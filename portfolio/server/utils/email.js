@@ -2,10 +2,12 @@ const nodemailer = require('nodemailer')
 
 const createTransporter = () => {
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      pass: process.env.EMAIL_PASS, // Ensure this is a 16-character App Password
     },
   })
 }
@@ -18,8 +20,7 @@ const sendNotificationEmail = async ({ name, email, subject, message }) => {
 
   await transporter.sendMail({
     from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-    // Bulletproof fallback: uses the env variable or safely defaults to your email address directly
-    to: process.env.EMAIL_TO || 'yakshayayuvaraj2006@gmail.com', 
+    to: process.env.EMAIL_TO || 'akshayayuvaraj2006@gmail.com', 
     subject: `📬 New Message: ${subject || 'Portfolio Contact'}`,
     html: `
       <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #f8fafc; border-radius: 12px;">
