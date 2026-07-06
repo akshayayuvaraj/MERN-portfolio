@@ -1,5 +1,6 @@
-const Contact = require('../models/Contact')
-const { sendNotificationEmail, sendThankYouEmail } = require('../utils/email')
+// controllers/contactController.js
+const Contact = require('../models/Contact');
+const { sendEmail } = require('../utils/email');
 
 /**
  * POST /api/contact
@@ -7,50 +8,41 @@ const { sendNotificationEmail, sendThankYouEmail } = require('../utils/email')
  */
 const submitContact = async (req, res, next) => {
   try {
-    const { name, email, subject, message } = req.body
-    let contactId = null
+    const { name, email, subject, message } = req.body;
 
-    // 1. Save to MongoDB
+    // 1. Save to MongoDB (Best practice to keep a record of all submissions)
+    let contactId = null;
     if (Contact.db && Contact.db.readyState === 1) {
       try {
-        const contact = await Contact.create({
+        const newContact = await Contact.create({
           name,
           email,
           subject,
           message,
           ip: req.ip,
         });
-        contactId = contact._id;
+        contactId = newContact._id;
       } catch (dbError) {
-        console.error('[Database Error]:', dbError.message)
+        console.error('[Database Error]:', dbError.message);
       }
     }
 
-    // 2. FIRE AND FORGET: Removed 'await' to prevent UI hanging
-    // The server will now return the success response immediately
-    Promise.allSettled([
-      sendNotificationEmail({ name, email, subject, message }),
-      sendThankYouEmail({ name, email })
-    ]).then((results) => {
-      results.forEach((result, index) => {
-        if (result.status === 'rejected') {
-          console.error(`❌ Email ${index === 0 ? 'Notification' : 'ThankYou'} failed:`, result.reason.message);
-        } else {
-          console.log(`📧 Email ${index === 0 ? 'Notification' : 'ThankYou'} sent successfully!`);
-        }
-      });
-    });
+    // 2. Trigger email via API (Fire-and-forget)
+    // The response is sent immediately, while the email process runs in the background.
+    sendEmail({ name, email, subject, message })
+      .then(() => console.log('📧 Notification email sent successfully!'))
+      .catch(err => console.error('📧 Email failed:', err.message));
 
-    // 3. Send success response IMMEDIATELY
+    // 3. Send success response IMMEDIATELY to stop the "Sending..." loop
     return res.status(201).json({
       success: true,
       message: "Message received! I'll get back to you soon.",
       data: { id: contactId },
-    })
+    });
   } catch (error) {
     console.error('[Controller Error]:', error);
-    next(error)
+    next(error);
   }
-}
+};
 
-module.exports = { submitContact }
+module.exports = { submitContact };
