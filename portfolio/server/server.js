@@ -28,15 +28,15 @@ app.use(helmet({
 }))
 
 // CORS - Updated to authorize your real live production domain
+// CORS - Updated to authorize your real live production domain
 app.use(cors({
   origin: [
     process.env.CLIENT_URL || 'http://localhost:5173',
-    'https://mern-portfolio-nu-eight.vercel.app', // Your verified live production app
-    'https://akshaya-portfolio.vercel.app'
+    'https://akshaya-portfolio.vercel.app',
+    'https://akshaya-mernportfolio.vercel.app' // ADD THIS LINE
   ],
   credentials: true,
 }))
-
 // Logging
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
